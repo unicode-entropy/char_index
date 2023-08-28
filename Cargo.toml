@@ -2,6 +2,7 @@
 name = "char_index"
 version = "0.1.0"
 edition = "2021"
+license = "MPL-2.0"
 
 
 [profile.dev]
