@@ -1,7 +1,8 @@
 #![no_std]
 #![warn(clippy::pedantic)]
+#![allow(clippy::module_name_repetitions)]
 #![forbid(unsafe_code)]
-//#![warn(missing_docs)] TODO enable
+#![warn(missing_docs)]
 //! # `char_index`
 //! A crate that provides a tradeoff of space efficiency and apparent O(1) charwise indexing.  
 //!
@@ -17,7 +18,7 @@
 //! to the string, it can no longer store data, as it would overflow u8.
 //! This is where the rollovers structure takes effect, it is a `Vec<usize>` whose sole purpose is to
 //! store indexes where a rollover has occurred, this can then be trivially binary searched to find the
-//! current index we are working with, and then apply the length of the list at that point multiplied by u8::MAX to find the true offset of the character.
+//! current index we are working with, and then apply the length of the list at that point multiplied by `u8::MAX` to find the true offset of the character.
 //!
 //! In this way, we achieve what behaves as an O(1) char lookup (technically worst case O(log n)) for most strings, while saving memory over `Vec<char>` (sans the case where the string is only made up of 4 byte characters, which acts as the worst case for time complexity too).
 //!
