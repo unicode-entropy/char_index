@@ -1,8 +1,7 @@
 #![no_std]
-#![warn(clippy::pedantic)]
-#![allow(clippy::module_name_repetitions)]
 #![forbid(unsafe_code)]
-#![warn(missing_docs)]
+#![warn(clippy::pedantic, clippy::missing_docs_in_private_items, missing_docs)]
+#![allow(clippy::module_name_repetitions)]
 //! # `char_index`
 //! A crate that provides a tradeoff of space efficiency and apparent O(1) charwise indexing.  
 //!

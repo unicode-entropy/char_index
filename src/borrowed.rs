@@ -1,3 +1,5 @@
+//! Module containing [`IndexedChars`] and its trait implementations
+
 use crate::IndexedCharsInner;
 use core::{
     borrow::Borrow,
@@ -19,7 +21,9 @@ use core::{
 ///
 /// This type mimics a `&'a str` with its trait impls, including `Debug`, `Display`, `PartialEq` with `&str` `PartialOrd` with `&str`, `Hash`, and `AsRef`/`Borrow`.
 pub struct IndexedChars<'a> {
+    /// Backing string buffer
     buf: &'a str,
+    /// Char offsets index
     inner: IndexedCharsInner,
 }
 

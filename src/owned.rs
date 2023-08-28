@@ -1,3 +1,5 @@
+//! Module containing [`OwnedIndexedChars`] and its trait implementations
+
 use alloc::string::String;
 use core::{
     borrow::Borrow,
@@ -21,7 +23,9 @@ use crate::IndexedCharsInner;
 ///
 /// This type mimics a `String` with its trait impls, including `Debug`, `Display`, `PartialEq` with `&str` `PartialOrd` with `&str`, `Hash`, and `AsRef`/`Borrow`.
 pub struct OwnedIndexedChars {
+    /// Backing string allocation
     buf: String,
+    /// Char offsets index
     inner: IndexedCharsInner,
 }
 

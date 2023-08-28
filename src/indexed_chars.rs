@@ -1,12 +1,20 @@
+//! Houses core implementation of char index.
+
 use alloc::vec::Vec;
 
+/// The core type of `char_index`.
+/// This struct implements building a memory efficient index of char
+///  locations, and a method to access that index.
 #[derive(Debug)]
 pub(crate) struct IndexedCharsInner {
+    /// The char offsets, stores the amount that a given char index must increment by to be in the correct range
     chars: Vec<u8>,
+    /// rollovers, stores the points where the offsets overflowed u8, so it may be binary searched to add `u8::MAX` * index_in_rollovers to the offset
     rollovers: Vec<usize>,
 }
 
 impl IndexedCharsInner {
+    /// Computes a new char index from a backing string
     pub(crate) fn new(s: &str) -> Self {
         // this is expensive but it lets us avoid big reallocs
         // it also lets us niche on ascii strings
@@ -49,6 +57,7 @@ impl IndexedCharsInner {
         Self { chars, rollovers }
     }
 
+    /// Gets a char from a string using the index, the string passed must be the one this index was created with
     pub(crate) fn get_char(&self, buf: &str, index: usize) -> Option<char> {
         // niche on empty chars with nonempty buf (ascii optimization)
         if self.chars.is_empty() & !buf.is_empty() {
