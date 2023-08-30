@@ -31,6 +31,16 @@ pub struct OwnedIndexedChars {
 
 impl OwnedIndexedChars {
     /// Constructs a new [`OwnedIndexedChars`] instance from a [`String`]. This is O(n), but the cost should only be paid once ideally.
+    ///
+    /// # Examples
+    /// ```rust
+    /// # use char_index::OwnedIndexedChars;
+    /// let index = OwnedIndexedChars::new(String::from("foo"));
+    ///
+    /// // we can still access str methods through deref
+    /// _ = index.chars();
+    /// # assert_eq!(index.get_char(0), Some('f'));
+    /// ```
     #[must_use]
     pub fn new(s: String) -> Self {
         let inner = IndexedCharsInner::new(&s);
@@ -41,15 +51,37 @@ impl OwnedIndexedChars {
     /// Indexes into the backing string to retrieve the nth codepoint.
     ///
     /// This operation has an average case of O(1), and a worst case of O(log n).
+    ///
+    /// # Examples
+    /// ```rust
+    /// # use char_index::OwnedIndexedChars;
+    /// let s = OwnedIndexedChars::new(String::from("foo"));
+    ///
+    /// assert_eq!(s.get_char(1), Some('o'));
+    /// ```
     #[must_use]
     pub fn get_char(&self, index: usize) -> Option<char> {
         self.inner.get_char(&self.buf, index)
     }
 
-    /// Drops index data and returns backing string allocation
+    /// Drops index data and returns backing `String` allocation.
     #[must_use]
     pub fn into_string(self) -> String {
         self.buf
+    }
+
+    /// Returns a reference to the backing `String` allocation.
+    ///
+    /// Generally you don't want this, and should instead use [`as_str`][OwnedIndexedChars::as_str] or [`Deref`]
+    #[must_use]
+    pub fn as_string(&self) -> &String {
+        &self.buf
+    }
+
+    /// Returns a reference to the backing `String` as a `&str`.
+    #[must_use]
+    pub fn as_str(&self) -> &str {
+        self.buf.as_str()
     }
 }
 

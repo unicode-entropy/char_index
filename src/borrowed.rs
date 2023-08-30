@@ -29,6 +29,14 @@ pub struct IndexedChars<'a> {
 
 impl<'a> IndexedChars<'a> {
     /// Constructs a new [`IndexedChars`] instance from a [`&str`]. This is O(n), but the cost should only be paid once ideally.
+    ///
+    ///
+    /// # Examples
+    /// ```rust
+    /// # use char_index::IndexedChars;
+    /// let index = IndexedChars::new("foo");
+    /// # assert_eq!(index.get_char(0), Some('f'));
+    /// ```
     #[must_use]
     pub fn new(s: &'a str) -> Self {
         let inner = IndexedCharsInner::new(s);
@@ -39,9 +47,21 @@ impl<'a> IndexedChars<'a> {
     /// Indexes into the backing string to retrieve the nth codepoint.
     ///
     /// This operation has an average case of O(1), and a worst case of O(log n).
+    ///
+    /// # Examples
+    /// ```rust
+    /// # use char_index::IndexedChars;
+    /// assert_eq!(IndexedChars::new("foobar").get_char(3), Some('b'));
+    /// ```
     #[must_use]
     pub fn get_char(&self, index: usize) -> Option<char> {
         self.inner.get_char(self.buf, index)
+    }
+
+    /// Returns a reference to the backing `&str`
+    #[must_use]
+    pub fn as_str(&self) -> &str {
+        self.buf
     }
 }
 
