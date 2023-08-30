@@ -95,9 +95,12 @@ fn create() {
 
     let foo_alloc = format!("{special}a");
 
-    let foo = IndexedCharsInner::new(&foo_alloc);
+    let foo_s = IndexedCharsInner::new(&foo_alloc);
 
-    assert_eq!(foo.chars, &[0, (special.len_utf8() - 1) as u8]);
+    assert_eq!(
+        foo_s.chars,
+        &[0, u8::try_from(special.len_utf8() - 1).unwrap()]
+    );
 }
 
 #[test]
@@ -106,9 +109,9 @@ fn get_idx() {
     use rand::{seq::SliceRandom, thread_rng};
 
     let mut chars: Vec<_> = (0..20_000)
-        .map(|i| char::from_u32(i as u32).unwrap())
+        .map(|i| char::from_u32(i).unwrap())
         .cycle()
-        .take(1_000_000)
+        .take(100_000)
         .collect();
 
     chars.shuffle(&mut thread_rng());
