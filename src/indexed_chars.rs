@@ -57,11 +57,19 @@ impl IndexedCharsInner {
         Self { chars, rollovers }
     }
 
+    /// Returns whether the string for this index contains only ascii characters.
+    /// An empty string is also technically only ascii for the purposes of this function.
+    pub(crate) fn is_ascii(&self) -> bool {
+        self.chars.is_empty()
+    }
+
     /// Gets a char from a string using the index, the string passed must be the one this index was created with
     pub(crate) fn get_char(&self, buf: &str, index: usize) -> Option<char> {
-        // niche on empty chars with nonempty buf (ascii optimization)
-        if self.chars.is_empty() & !buf.is_empty() {
-            return buf.get(index..).and_then(|c| c.chars().next());
+        // niche on empty chars (ascii optimization)
+        if self.is_ascii() {
+            // explicitly unwrap in chars because a None indicates a bug on our end.
+            // if buf.get fails, that is a userland None.
+            return buf.get(index..).map(|c| c.chars().next().unwrap());
         }
 
         // if its in self.chars we can assume its in buf
@@ -75,7 +83,8 @@ impl IndexedCharsInner {
                 // index where it "would" be regardless if its found, never its actual location
                 .map_or_else(|e| e, |t| t + 1);
 
-        buf[index + offset..].chars().next()
+        // explicitly unwrap here because a None indicates a bug on our end
+        Some(buf[index + offset..].chars().next().unwrap())
     }
 }
 
