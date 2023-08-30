@@ -5,11 +5,11 @@ A crate for ~O(1) charwise indexing into a string, without normally using as muc
 1000 "e"'s with 3 extra non ascii chars, shuffled:
 |Implementation|Memory Use|Index 200th codepoint|
 |-|-|-|
-|`Vec<char>`|4,012B|0.6ns|
-|`IndexedChars`|2,009B|4ns|
-|`String`|1,006B|126ns|  
+|`Vec<char>`|4,012B (+ 24B direct)|0.6ns|
+|`IndexedChars`|2,009B (+ 64B direct)|4ns|
+|`String`|1,006B (+ 24B direct)|126ns|  
 
-(data collected using benches/char_index.rs)
+(data collected using `benches/char_index.rs`)
 
 # `no_std`
 This crate is fully `no_std`, however it does rely on alloc.  
