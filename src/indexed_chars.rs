@@ -99,6 +99,8 @@ fn create() {
     let s = IndexedCharsInner::new(s_buf);
 
     assert!(s.rollovers.is_empty());
+    assert!(s.is_ascii());
+    assert_eq!(s.get_char(s_buf, 4), None);
 
     let special = '💯';
 
@@ -110,6 +112,8 @@ fn create() {
         foo_s.chars,
         &[0, u8::try_from(special.len_utf8() - 1).unwrap()]
     );
+
+    assert_eq!(foo_s.get_char(&foo_alloc, 2), None);
 }
 
 #[test]
