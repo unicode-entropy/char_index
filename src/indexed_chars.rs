@@ -109,6 +109,7 @@ fn create() {
     let s_buf = "foo";
     let s = IndexedCharsInner::new(s_buf);
 
+    assert_eq!(s.char_count(&s_buf), 3);
     assert!(s.rollovers.is_empty());
     assert!(s.is_ascii());
     assert_eq!(s.get_char(s_buf, 4), None);
@@ -125,6 +126,8 @@ fn create() {
     );
 
     assert_eq!(foo_s.get_char(&foo_alloc, 2), None);
+
+    assert_eq!(foo_s.char_count(&foo_alloc), 2);
 }
 
 #[test]
