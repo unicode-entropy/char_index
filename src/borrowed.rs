@@ -58,6 +58,13 @@ impl<'a> IndexedChars<'a> {
         self.inner.get_char(self.buf, index)
     }
 
+    /// Returns the number of chars present in the backing string, this operation is free thanks to
+    /// how [`IndexedChars`] is constructed
+    #[must_use]
+    pub fn char_count(&self) -> usize {
+        self.inner.char_count(self.buf)
+    }
+
     /// Returns a reference to the backing `&str`
     #[must_use]
     pub fn as_str(&self) -> &str {

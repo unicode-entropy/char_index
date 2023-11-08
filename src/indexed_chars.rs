@@ -18,6 +18,7 @@ impl IndexedCharsInner {
     pub(crate) fn new(s: &str) -> Self {
         // this is expensive but it lets us avoid big reallocs
         // it also lets us niche on ascii strings
+        // maybe-TODO(ultrabear) replace with no-std bytecount::num_chars?
         let charlen = s.chars().count();
 
         // if the number of chars is equal to the number of bytes we can skip allocating at all
@@ -61,6 +62,16 @@ impl IndexedCharsInner {
     /// An empty string is also technically only ascii for the purposes of this function.
     pub(crate) fn is_ascii(&self) -> bool {
         self.chars.is_empty()
+    }
+
+    /// Computes the amount of chars in the given string in O(1) time,
+    /// the string passed must be the one this index was created with.
+    pub(crate) fn char_count(&self, buf: &str) -> usize {
+        if self.is_ascii() {
+            buf.len()
+        } else {
+            self.chars.len()
+        }
     }
 
     /// Gets a char from a string using the index, the string passed must be the one this index was created with

@@ -64,6 +64,13 @@ impl OwnedIndexedChars {
         self.inner.get_char(&self.buf, index)
     }
 
+    /// Returns the number of chars present in the backing string, this operation is free thanks to
+    /// how [`OwnedIndexedChars`] is constructed
+    #[must_use]
+    pub fn char_count(&self) -> usize {
+        self.inner.char_count(&self.buf)
+    }
+
     /// Drops index data and returns backing `String` allocation.
     #[must_use]
     pub fn into_string(self) -> String {
