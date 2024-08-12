@@ -1,6 +1,6 @@
 [package]
 name = "char_index"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2021"
 keywords = ["string", "chars", "index"]
 categories = ["data-structures", "no-std"]
