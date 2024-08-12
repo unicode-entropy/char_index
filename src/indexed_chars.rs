@@ -78,9 +78,15 @@ impl IndexedCharsInner {
     pub(crate) fn get_char(&self, buf: &str, index: usize) -> Option<char> {
         // niche on empty chars (ascii optimization)
         if self.is_ascii() {
+            // insert this check because .get(index..) will return Some("") on index == buf.len()
+            // but index == buf.len() is a None for us
+            // we can then use the Index trait and assume its looser check is optimized away
+            if index >= buf.len() {
+                return None;
+            }
+
             // explicitly unwrap in chars because a None indicates a bug on our end.
-            // if buf.get fails, that is a userland None.
-            return buf.get(index..).map(|c| c.chars().next().unwrap());
+            return Some(buf[index..].chars().next().unwrap());
         }
 
         // if its in self.chars we can assume its in buf
@@ -163,10 +169,7 @@ fn uniform() {
 
 #[test]
 fn asciiopt() {
-
-
     let ascii = "abcdefghijklmnopqrstuvwxyz";
-
 
     let ichars = IndexedCharsInner::new(ascii);
 
@@ -176,6 +179,5 @@ fn asciiopt() {
     assert!(ichars.chars.is_empty());
 
     assert_eq!(ichars.get_char(&ascii, ascii.len()), None);
-    assert_eq!(ichars.get_char(&ascii, ascii.len()-1), Some('z'));
-
+    assert_eq!(ichars.get_char(&ascii, ascii.len() - 1), Some('z'));
 }
