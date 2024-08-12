@@ -130,8 +130,19 @@ fn create() {
     assert_eq!(foo_s.char_count(&foo_alloc), 2);
 }
 
+#[cfg(test)]
+fn get_idx(s: &str) {
+    let index = IndexedCharsInner::new(&s);
+
+    for (char_idx, (_real_idx, c)) in s.char_indices().enumerate() {
+        assert_eq!(index.get_char(&s, char_idx).unwrap(), c);
+    }
+
+    assert_eq!(index.get_char(&s, index.char_count(&s)), None)
+}
+
 #[test]
-fn get_idx() {
+fn uniform() {
     use alloc::string::String;
     use rand::{seq::SliceRandom, thread_rng};
 
@@ -145,9 +156,26 @@ fn get_idx() {
 
     let s = String::from_iter(&chars);
 
-    let index = IndexedCharsInner::new(&s);
+    get_idx(&s);
+    // test ascii optimization
+    get_idx("abcdefghijk");
+}
 
-    for (char_idx, (_real_idx, c)) in s.char_indices().enumerate() {
-        assert_eq!(index.get_char(&s, char_idx).unwrap(), c);
-    }
+#[test]
+fn asciiopt() {
+
+
+    let ascii = "abcdefghijklmnopqrstuvwxyz";
+
+
+    let ichars = IndexedCharsInner::new(ascii);
+
+    assert!(ichars.is_ascii());
+
+    assert!(ichars.rollovers.is_empty());
+    assert!(ichars.chars.is_empty());
+
+    assert_eq!(ichars.get_char(&ascii, ascii.len()), None);
+    assert_eq!(ichars.get_char(&ascii, ascii.len()-1), Some('z'));
+
 }
