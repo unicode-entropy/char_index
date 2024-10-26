@@ -1,11 +1,11 @@
 [package]
 name = "char_index"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2021"
 keywords = ["string", "chars", "index"]
 categories = ["data-structures", "no-std"]
-homepage = "https://github.com/ultrabear/char_index"
-repository = "https://github.com/ultrabear/char_index"
+homepage = "https://github.com/unicode-entropy/char_index"
+repository = "https://github.com/unicode-entropy/char_index"
 description = "A crate for efficient charwise indexing into a string"
 readme = "README.md"
 license = "MPL-2.0"
